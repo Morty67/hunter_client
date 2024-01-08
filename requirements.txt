@@ -1,6 +1,7 @@
 anyio==4.2.0
 astor==0.8.1
 attrs==23.2.0
+autopep8==2.0.4
 bandit==1.7.6
 certifi==2023.11.17
 colorama==0.4.6
