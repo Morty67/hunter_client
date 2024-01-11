@@ -10,11 +10,12 @@ Classes:
 """
 
 import asyncio
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from account_info_retriever import AccountInfoRetriever
 from crud_mixin import CRUDMixin
 from demonstration_utils import crud_demonstration
+from email_check_service import EmailCheckService
 from email_finder import EmailFinder
 from email_verifer import EmailVerifier
 from lead_list_retriever import LeadListRetriever
@@ -63,30 +64,17 @@ class HunterAPI(CRUDMixin):
         self.lead_list_retriever = LeadListRetriever(
             self._base_url, self._my_api_key,
         )
-
-    async def email_check_service(self, mail: str) -> Dict[str, Any]:
-        """
-        Service for email checking.
-
-        This method provides a service for checking an email address.
-        Replace the placeholder implementation with your actual logic.
-
-        Args:
-            mail (str): The email address to be checked.
-
-        Returns:
-            dict: The result of the email checking service.
-        """
-        result_for_check = {'status': 'checked', 'mail': mail}
-        self.create_result('email_check', result_for_check)
-        return result_for_check
+        self.email_check_service_instance = EmailCheckService()
 
 
 if __name__ == '__main__':
     api = HunterAPI()
     # Call email_check_service before CRUD demonstration
-    asyncio.run(api.email_check_service(mail='example@email.com'))
-
+    email_check_result = asyncio.run(
+        api.email_check_service_instance.check_email(
+            mail='gkarabetskii@gmail.com',
+        ),
+    )
     verification_result = asyncio.run(api.email_verifier.verification_email(
         mail='gkarabestkii@gmail.com',
     ))
