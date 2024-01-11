@@ -21,7 +21,8 @@ from lead_list_retriever import LeadListRetriever
 
 
 class HunterAPI(CRUDMixin):
-    """Client for interacting with the Hunter.io API.
+    """
+    Client for interacting with the Hunter.io API.
 
     This class encapsulates functionalities for interacting with various
          endpoints of the Hunter.io API, including email verification,
@@ -31,6 +32,12 @@ class HunterAPI(CRUDMixin):
     Attributes:
         - _base_url (str): The base URL for the Hunter.io API.
         - _my_api_key (str): The API key used for authentication.
+        - email_verifier (EmailVerifier): Instance for email verification.
+        - account_info_retriever (AccountInfoRetriever): Instance for,
+            account, information retrieval.
+        - email_finder (EmailFinder): Instance for email finding.
+        - lead_list_retriever (LeadListRetriever): Instance for lead, list
+            retrieval.
     """
 
     def __init__(self, api_key: Optional[str] = None) -> None:
@@ -73,67 +80,6 @@ class HunterAPI(CRUDMixin):
         result_for_check = {'status': 'checked', 'mail': mail}
         self.create_result('email_check', result_for_check)
         return result_for_check
-
-    async def verification_email(self, mail: str) -> Dict[str, Any]:
-        """
-        Verify an email address using the Hunter.io API.
-
-        Args:
-            mail (str): The email address to be verified.
-
-        Returns:
-            dict: The result of the email verification.
-        """
-        return await self.email_verifier.verification_email(mail)
-
-    async def get_info_about_account(
-        self, api_key: Optional[str] = None,
-    ) -> Dict[str, Any]:
-        """
-        Get information about the Hunter.io account.
-
-        Args:
-            api_key (str, optional): The API key for Hunter.io. If provided,
-                it will override the instance key.
-
-        Returns:
-            dict: The result of the account information retrieval.
-        """
-        return await self.account_info_retriever.get_info_about_account(
-            api_key,
-        )
-
-    async def email_finder(
-        self,
-        domain: Optional[str] = None,
-        company: Optional[str] = None,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None,
-    ) -> Dict[str, Any]:
-        """
-        Find the most likely email address from a domain name.
-
-        Args:
-            domain (str, optional): The domain name of the company.
-            company (str, optional): The company name from which to find email.
-            first_name (str, optional): The person's first name.
-            last_name (str, optional): The person's last name.
-
-        Returns:
-            dict: The result of the email finding.
-        """
-        return await self.email_finder.email_finder(
-            domain, company, first_name, last_name,
-        )
-
-    async def get_list_of_lead(self) -> Dict[str, Any]:
-        """
-        Get a list of leads using the Hunter.io API.
-
-        Returns:
-            dict: The result of the lead list retrieval.
-        """
-        return await self.lead_list_retriever.get_list_of_lead()
 
 
 if __name__ == '__main__':
